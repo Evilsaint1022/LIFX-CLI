@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # start.sh — set up and run lifx-cli on Linux.
-# Installs Node deps (and the optional screen-capture tool), then runs the CLI.
-# Any arguments you pass are forwarded to the CLI, e.g.:
-#   ./start.sh list
-#   ./start.sh color deepskyblue --brightness 80
-# With no arguments it prints the help.
+# Installs Node deps (and the optional screen-capture tool), then launches the
+# interactive shell where you can run commands in a loop:
+#   ./start.sh                -> opens the `lifx>` interactive shell
+#   ./start.sh color red      -> runs a single command instead and exits
 set -euo pipefail
 
 # Always work from the script's own directory.
@@ -40,5 +39,10 @@ else
 fi
 
 # --- 4. Run the CLI -------------------------------------------------------
+# No args -> launch the interactive shell; otherwise run the one-shot command.
 echo "----------------------------------------"
-exec node lifx.js "$@"
+if [ "$#" -gt 0 ]; then
+  exec node lifx.js "$@"
+else
+  exec node lifx.js shell
+fi

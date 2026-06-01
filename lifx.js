@@ -6,10 +6,21 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { select, done, parseColor, rgbToHsb } from './lib/lights.js';
+import readline from 'node:readline';
+import { select, done, primeCache, parseColor, rgbToHsb } from './lib/lights.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
+
+// Mutable command state — reassigned per line when running in shell mode.
+let flags = {};
+let positional = [];
+let command;
+let target; // optional bulb name; default = all
+let duration = 0; // fade ms
+
+let shellMode = false; // true while the interactive shell is running
+let abortLoop = false; // set by Ctrl+C to stop a running cycle/screen loop
 
 // --- tiny flag parser ----------------------------------------------------
 // Pulls --key value / --flag out of args, leaving positionals behind.
@@ -34,10 +45,22 @@ function parseFlags(args) {
   return { flags, positional };
 }
 
-const { flags, positional } = parseFlags(argv);
-const command = positional[0];
-const target = flags.bulb || flags.b; // optional bulb name; default = all
-const duration = flags.duration !== undefined ? Number(flags.duration) : 0; // fade ms
+// Populate the command state from a list of args (used by both one-shot and
+// interactive shell modes).
+function applyArgs(args) {
+  ({ flags, positional } = parseFlags(args));
+  command = positional[0];
+  target = flags.bulb || flags.b;
+  duration = flags.duration !== undefined ? Number(flags.duration) : 0;
+}
+
+// Split a shell line into args, honoring simple "double" and 'single' quotes.
+function tokenize(line) {
+  const m = line.match(/[^\s"']+|"[^"]*"|'[^']*'/g) || [];
+  return m.map((t) => t.replace(/^["']|["']$/g, ''));
+}
+
+applyArgs(argv);
 
 function loadPresets() {
   try {
@@ -176,13 +199,10 @@ const commands = {
     const loops = flags.loops !== undefined ? Number(flags.loops) : Infinity;
     const devices = await select(target);
     console.log(`Cycling ${palette.length} colors every ${period}ms. Ctrl+C to stop.`);
-    let stop = false;
-    process.on('SIGINT', () => {
-      stop = true;
-    });
-    for (let n = 0; n < loops && !stop; n++) {
+    abortLoop = false;
+    for (let n = 0; n < loops && !abortLoop; n++) {
       for (const color of palette) {
-        if (stop) break;
+        if (abortLoop) break;
         await Promise.all(devices.map((d) => d.setColor({ color, duration: period })));
         await sleep(period);
       }
@@ -196,17 +216,72 @@ const commands = {
     const devices = await select(target);
     await Promise.all(devices.map((d) => d.turnOn({ duration: 0 })));
     console.log(`Mirroring screen color every ${interval}ms. Ctrl+C to stop.`);
-    let stop = false;
-    process.on('SIGINT', () => {
-      stop = true;
-    });
-    while (!stop) {
+    abortLoop = false;
+    while (!abortLoop) {
       let rgb = await averageScreenColor();
       if (flags.punch) rgb = punchUp(rgb);
       const color = rgbToHsb(rgb.red, rgb.green, rgb.blue);
       await Promise.all(devices.map((d) => d.setColor({ color, duration: interval })));
       await sleep(interval);
     }
+  },
+
+  // lifx shell  — interactive prompt; discovers bulbs once, then loops.
+  async shell() {
+    process.stdout.write('Discovering bulbs...\n');
+    const devices = await primeCache();
+    if (devices.length === 0) throw new Error('No LIFX bulbs found on the network.');
+    // Only now take over the process lifecycle (the `finally` defers to us).
+    shellMode = true;
+    console.log(
+      `Connected to ${devices.length} bulb(s): ${devices.map((d) => d.label).join(', ')}`
+    );
+    console.log('Type a command (e.g. `on`, `color red --brightness 50`), `help`, or `exit`.');
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      prompt: 'lifx> ',
+    });
+    rl.prompt();
+
+    rl.on('line', async (line) => {
+      const text = line.trim();
+      if (!text) return rl.prompt();
+      if (text === 'exit' || text === 'quit') return rl.close();
+      if (text === 'help' || text === '?') {
+        console.log(HELP);
+        return rl.prompt();
+      }
+      try {
+        applyArgs(tokenize(text));
+        const fn = commands[command];
+        if (!fn || command === 'shell') {
+          console.error(`Unknown command "${command}". Type \`help\`.`);
+        } else {
+          await fn();
+        }
+      } catch (e) {
+        console.error('Error:', e.message);
+      }
+      rl.prompt();
+    });
+
+    // Ctrl+C stops a running animation; if idle, it exits the shell.
+    rl.on('SIGINT', () => {
+      if (!abortLoop && (command === 'cycle' || command === 'screen')) {
+        abortLoop = true;
+        console.log('\n(stopping…)');
+      } else {
+        rl.close();
+      }
+    });
+
+    rl.on('close', async () => {
+      console.log('\nBye.');
+      await done();
+      process.exit(0);
+    });
   },
 };
 
@@ -236,6 +311,7 @@ const HELP = `lifx-cli — control LIFX bulbs over the LAN
 Usage: lifx <command> [args] [--bulb <name>] [--duration <ms>]
 
 Commands:
+  shell                      Interactive prompt: discover once, run commands in a loop
   list                       Discover bulbs and show their state
   on | off | toggle          Power control
   color <c>                  Set color: name | #hex | r,g,b
@@ -274,6 +350,12 @@ async function main() {
     process.exitCode = 1;
     return;
   }
+  // One-shot loops (run outside the shell) stop cleanly on Ctrl+C.
+  if (command === 'cycle' || command === 'screen') {
+    process.once('SIGINT', () => {
+      abortLoop = true;
+    });
+  }
   await fn();
 }
 
@@ -283,8 +365,9 @@ main()
     process.exitCode = 1;
   })
   .finally(async () => {
-    // `screen` and `cycle` loop until Ctrl+C; for them, exit on signal.
+    // The shell manages its own lifecycle (exits via its `close` handler).
+    if (shellMode) return;
     await done();
     // Ensure the process exits even if a UDP handle lingers.
-    if (command !== 'screen' && command !== 'cycle') process.exit(process.exitCode || 0);
+    process.exit(process.exitCode || 0);
   });

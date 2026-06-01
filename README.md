@@ -13,12 +13,34 @@ Screen Color** ambient mode (bias lighting that mirrors your screen).
 ## Quick start (Linux)
 
 ```bash
-./start.sh list          # installs deps + runs the CLI
-./start.sh color red
+./start.sh               # installs deps + opens the interactive shell
 ```
 
 `start.sh` checks for Node, installs `scrot` (for the screen feature) and the
-npm deps if needed, then forwards whatever you pass to the CLI.
+npm deps if needed, then launches the interactive `lifx>` shell. Pass arguments
+to run a single command instead, e.g. `./start.sh color red`.
+
+## Interactive shell
+
+The shell discovers your bulb **once** and stays connected, so every command
+runs instantly:
+
+```
+$ ./start.sh
+Discovering bulbs...
+Connected to 1 bulb(s): LIFX Mini 542b55
+Type a command (e.g. `on`, `color red --brightness 50`), `help`, or `exit`.
+lifx> on
+lifx> color deepskyblue --brightness 70
+lifx> cycle red lime blue --period 1500
+^C  (stops the animation, back to the prompt)
+lifx> exit
+```
+
+`help` lists commands, `exit`/`quit` (or Ctrl+D) leaves. During a `cycle` or
+`screen` animation, Ctrl+C stops it and returns to the prompt; pressing it at
+an idle prompt exits. Every command below works identically in the shell
+(without the leading `lifx`) and as a one-shot from your normal shell.
 
 ## Manual install
 
@@ -49,6 +71,7 @@ target one with `--bulb` and a piece of its name or MAC, e.g. `--bulb 542b55`.
 
 | Command | What it does |
 |---|---|
+| `lifx shell` | Interactive prompt — discover once, run commands in a loop |
 | `lifx list` | Discover bulbs and print their current state |
 | `lifx on` / `lifx off` / `lifx toggle` | Power control |
 | `lifx color <c>` | Set color: name (`red`), `#hex`, or `r,g,b` |
