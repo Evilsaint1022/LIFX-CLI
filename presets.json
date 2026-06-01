@@ -1,0 +1,11 @@
+{
+  "relax": { "color": { "saturation": 0, "kelvin": 2700, "brightness": 0.6 }, "duration": 1500 },
+  "focus": { "color": { "saturation": 0, "kelvin": 5000, "brightness": 1 }, "duration": 1000 },
+  "bright": { "color": { "saturation": 0, "kelvin": 4000, "brightness": 1 }, "duration": 500 },
+  "candle": { "color": { "hue": 0.08, "saturation": 0.7, "brightness": 0.35, "kelvin": 2500 }, "duration": 2000 },
+  "sunset": { "color": { "hue": 0.04, "saturation": 0.85, "brightness": 0.7, "kelvin": 2500 }, "duration": 2000 },
+  "ocean": { "color": { "hue": 0.55, "saturation": 0.9, "brightness": 0.7, "kelvin": 3500 }, "duration": 2000 },
+  "forest": { "color": { "hue": 0.33, "saturation": 0.8, "brightness": 0.6, "kelvin": 3500 }, "duration": 2000 },
+  "party": { "color": { "hue": 0.83, "saturation": 1, "brightness": 1, "kelvin": 3500 }, "duration": 300 },
+  "nightlight": { "color": { "hue": 0.05, "saturation": 0.9, "brightness": 0.08, "kelvin": 2500 }, "duration": 2000 }
+}

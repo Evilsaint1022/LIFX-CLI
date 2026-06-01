@@ -1,0 +1,17 @@
+{
+  "name": "lifx-cli",
+  "version": "1.0.0",
+  "description": "Minimal CLI to control a LIFX bulb over the LAN protocol",
+  "type": "module",
+  "bin": {
+    "lifx": "./lifx.js"
+  },
+  "scripts": {
+    "start": "node lifx.js"
+  },
+  "dependencies": {
+    "node-lifx-lan": "^0.3.0",
+    "screenshot-desktop": "^1.15.4",
+    "sharp": "^0.34.5"
+  }
+}
