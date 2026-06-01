@@ -108,6 +108,36 @@ lifx screen --interval 800 --punch      # Ctrl+C to stop
 
 `cycle` and `screen` loop until you press **Ctrl+C**.
 
+## Can't find the bulb?
+
+LIFX's LAN protocol (and apps like LIFX-Control-Panel) discover bulbs by **UDP
+broadcast**. That silently fails when the bulb sits on a different subnet/VLAN —
+e.g. a separate "IoT" or guest WiFi — or when the router blocks broadcast
+traffic. The fix is to talk to the bulb **directly by its IP**, which is plain
+unicast and routes normally:
+
+```bash
+# 1) Find the bulb's IP by sweeping your subnet via unicast (no broadcast):
+lifx scan
+#   ->  192.168.1.42   LIFX Mini 542b55
+
+# 2) Use that IP for any command (works across subnets):
+lifx on --ip 192.168.1.42
+lifx color red --ip 192.168.1.42
+
+# Or set it once so you can drop the flag:
+export LIFX_IP=192.168.1.42
+lifx shell
+```
+
+If `lifx scan` finds nothing, the bulb is on a **different subnet** than your
+computer. Look up its IP in your router's "connected devices" list (it'll show
+as a LIFX / `d0:73:d5:…` MAC), then pass that with `--ip`. Once you have the IP,
+every command — including `shell`, `cycle`, and `screen` — works with it.
+
+`scan` defaults to your computer's own /24; target another with
+`lifx scan 192.168.50` (or `--subnet 192.168.50`).
+
 ## Presets / scenes
 
 Edit [presets.json](presets.json) to add your own scenes. Each entry is a name

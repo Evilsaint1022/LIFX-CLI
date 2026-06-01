@@ -7,7 +7,15 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import readline from 'node:readline';
-import { select, done, primeCache, parseColor, rgbToHsb } from './lib/lights.js';
+import {
+  select,
+  done,
+  primeCache,
+  primeCacheByIp,
+  scan,
+  parseColor,
+  rgbToHsb,
+} from './lib/lights.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
@@ -17,6 +25,7 @@ let flags = {};
 let positional = [];
 let command;
 let target; // optional bulb name; default = all
+let ipTarget; // optional bulb IP (skips broadcast discovery)
 let duration = 0; // fade ms
 
 let shellMode = false; // true while the interactive shell is running
@@ -51,6 +60,7 @@ function applyArgs(args) {
   ({ flags, positional } = parseFlags(args));
   command = positional[0];
   target = flags.bulb || flags.b;
+  ipTarget = flags.ip || process.env.LIFX_IP;
   duration = flags.duration !== undefined ? Number(flags.duration) : 0;
 }
 
@@ -104,6 +114,20 @@ const commands = {
           `sat ${Math.round(c.saturation * 100)}%  ${c.kelvin}K  [${d.mac}]`
       );
     }
+  },
+
+  // lifx scan [--subnet 192.168.1]  — find bulbs by unicast when broadcast fails
+  async scan() {
+    const base = flags.subnet || positional[1];
+    console.log(`Scanning ${base ? base : 'your local subnet'} for LIFX bulbs (unicast)...`);
+    const found = await scan(base);
+    if (found.length === 0) {
+      console.log('No bulbs found. The bulb may be on a different subnet — check your');
+      console.log('router\'s device list for its IP, then use: lifx <cmd> --ip <address>');
+      return;
+    }
+    for (const f of found) console.log(`  ${f.ip}\t${f.label}`);
+    console.log(`\nUse it with:  lifx on --ip ${found[0].ip}   (or set LIFX_IP=${found[0].ip})`);
   },
 
   async on() {
@@ -228,9 +252,20 @@ const commands = {
 
   // lifx shell  — interactive prompt; discovers bulbs once, then loops.
   async shell() {
-    process.stdout.write('Discovering bulbs...\n');
-    const devices = await primeCache();
-    if (devices.length === 0) throw new Error('No LIFX bulbs found on the network.');
+    let devices;
+    if (ipTarget) {
+      process.stdout.write(`Connecting to ${ipTarget}...\n`);
+      devices = await primeCacheByIp(ipTarget);
+    } else {
+      process.stdout.write('Discovering bulbs...\n');
+      devices = await primeCache();
+    }
+    if (devices.length === 0) {
+      throw new Error(
+        'No LIFX bulbs found via broadcast. Run `lifx scan` to find the IP, then ' +
+          'start the shell with `--ip <address>` (or set LIFX_IP).'
+      );
+    }
     // Only now take over the process lifecycle (the `finally` defers to us).
     shellMode = true;
     console.log(
@@ -312,6 +347,7 @@ Usage: lifx <command> [args] [--bulb <name>] [--duration <ms>]
 
 Commands:
   shell                      Interactive prompt: discover once, run commands in a loop
+  scan [subnet]              Find bulbs by unicast when broadcast discovery fails
   list                       Discover bulbs and show their state
   on | off | toggle          Power control
   color <c>                  Set color: name | #hex | r,g,b
@@ -327,12 +363,20 @@ Commands:
 
 Global flags:
   --bulb <name>   Target one bulb by label/MAC substring (default: all)
+  --ip <address>  Talk to the bulb directly by IP (skips broadcast discovery;
+                  works across subnets / when broadcast is blocked).
+                  Can also be set via the LIFX_IP environment variable.
   --duration <ms> Fade time for on/off/color changes
 
+Can't find your bulb? Broadcast discovery often fails on guest/IoT subnets.
+Run "lifx scan" to find the IP by unicast, then use it:
+  lifx on --ip 192.168.1.42      (or: export LIFX_IP=192.168.1.42)
+
 Examples:
+  lifx scan
   lifx list
-  lifx on --bulb 542b55
-  lifx color deepskyblue --brightness 80
+  lifx on --ip 192.168.1.42
+  lifx color deepskyblue --brightness 80 --ip 192.168.1.42
   lifx white 2700 --duration 1000
   lifx cycle red lime blue --period 1500
   lifx breathe magenta --cycles 5 --period 1000
@@ -349,6 +393,11 @@ async function main() {
     console.log(HELP);
     process.exitCode = 1;
     return;
+  }
+  // If an IP was given, target the bulb directly (skip broadcast discovery).
+  // `shell` primes its own cache; `scan` must not be pinned to one IP.
+  if (ipTarget && command !== 'shell' && command !== 'scan') {
+    await primeCacheByIp(ipTarget);
   }
   // One-shot loops (run outside the shell) stop cleanly on Ctrl+C.
   if (command === 'cycle' || command === 'screen') {
