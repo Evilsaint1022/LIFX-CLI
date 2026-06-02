@@ -42,7 +42,7 @@ fi
 # No args -> launch the interactive shell; otherwise run the one-shot command.
 echo "----------------------------------------"
 if [ "$#" -gt 0 ]; then
-  exec node lifx.js "$@"
+  exec node ./src/lifx.js "$@"
 else
-  exec node lifx.js shell
+  exec node ./src/lifx.js shell
 fi
