@@ -4,10 +4,10 @@
   "description": "Minimal CLI to control a LIFX bulb over the LAN protocol",
   "type": "module",
   "bin": {
-    "lifx": "./lifx.js"
+    "lifx": "./src/lifx.js"
   },
   "scripts": {
-    "start": "node lifx.js"
+    "start": "node ./src/lifx.js"
   },
   "dependencies": {
     "node-lifx-lan": "^0.5.1",

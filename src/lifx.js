@@ -15,7 +15,7 @@ import {
   scan,
   parseColor,
   rgbToHsb,
-} from './lib/lights.js';
+} from '../src/lib/lights.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
@@ -74,7 +74,7 @@ applyArgs(argv);
 
 function loadPresets() {
   try {
-    return JSON.parse(readFileSync(join(HERE, 'presets.json'), 'utf8'));
+    return JSON.parse(readFileSync(join(HERE, '../src/presets/presets.json'), 'utf8'));
   } catch {
     return {};
   }
@@ -235,7 +235,7 @@ const commands = {
 
   // lifx screen [--interval ms] [--punch]  — mirror average screen color
   async screen() {
-    const { averageScreenColor, punchUp } = await import('./lib/screen.js');
+    const { averageScreenColor, punchUp } = await import('../src/lib/screen.js');
     const interval = flags.interval !== undefined ? Number(flags.interval) : 1000;
     const devices = await select(target);
     await Promise.all(devices.map((d) => d.turnOn({ duration: 0 })));
