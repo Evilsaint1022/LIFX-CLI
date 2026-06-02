@@ -10,6 +10,9 @@ to a dependency-light CLI: color / brightness / Kelvin control, preset scenes,
 color cycling, breathe & pulse effects, and the app's signature **Average
 Screen Color** ambient mode (bias lighting that mirrors your screen).
 
+**🦋・Disclaimer** - No moths were harmed in the making of this project. Any resemblance to harmed moths, living or deceased, is purely coincidental.  
+
+
 ## 🌿 <ins>Quick start (Linux)</ins> 🌿
 
 ```bash
