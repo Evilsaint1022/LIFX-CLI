@@ -1,4 +1,4 @@
-# 🌿 LIFX-CLI - ( Command Line Interface ) 🌿
+# 🌿 <ins>**LIFX-CLI - ( Command Line Interface )**</ins> 🌿
 
 A small terminal controller for LIFX bulbs, talking directly to them over your
 local network (the LIFX **LAN protocol**) — no cloud account, no API token, no
@@ -10,7 +10,7 @@ to a dependency-light CLI: color / brightness / Kelvin control, preset scenes,
 color cycling, breathe & pulse effects, and the app's signature **Average
 Screen Color** ambient mode (bias lighting that mirrors your screen).
 
-## 🌿 Quick start (Linux) 🌿
+## 🌿 <ins>Quick start (Linux)</ins> 🌿
 
 ```bash
 ./start.sh               # installs deps + opens the interactive shell
@@ -20,7 +20,7 @@ Screen Color** ambient mode (bias lighting that mirrors your screen).
 npm deps if needed, then launches the interactive `lifx>` shell. Pass arguments
 to run a single command instead, e.g. `./start.sh color red`.
 
-## 🌿 Interactive shell 🌿
+## 🌿 <ins>Interactive shell</ins> 🌿
 
 The shell discovers your bulb **once** and stays connected, so every command
 runs instantly:
@@ -42,7 +42,7 @@ lifx> exit
 an idle prompt exits. Every command below works identically in the shell
 (without the leading `lifx`) and as a one-shot from your normal shell.
 
-## 🌿 Manual install 🌿
+## 🌿 <ins>Manual install</ins> 🌿
 
 ```bash
 npm install
@@ -51,7 +51,7 @@ npm link        # optional: makes `lifx` available globally
 
 If you don't `npm link`, run commands as `node lifx.js <command>` instead of `lifx <command>`.
 
-### 🌿 Screen-mirror dependency 🌿
+### 🌿 <ins>Screen-mirror dependency</ins> 🌿
 The `screen` command grabs your display via
 [`screenshot-desktop`](https://www.npmjs.com/package/screenshot-desktop):
 - **Linux:** needs `scrot` or ImageMagick installed (`sudo apt install scrot`).
@@ -60,7 +60,7 @@ The `screen` command grabs your display via
 
 Everything except `screen` works with no extra system packages.
 
-## 🌿 Usage 🌿
+## 🌿 <ins>Usage</ins> 🌿
 
 ```
 lifx <command> [args] [--bulb <name>] [--duration <ms>]
@@ -84,7 +84,7 @@ target one with `--bulb` and a piece of its name or MAC, e.g. `--bulb 542b55`.
 | `lifx cycle [c1 c2 …]` | Cycle through colors (rainbow if none given) |
 | `lifx screen` | Mirror your average screen color (bias lighting) |
 
-### 🌿 Flags 🌿
+### 🌿 <ins>Flags</ins> 🌿
 - `--bulb <name>` — target one bulb by label/MAC substring (default: all)
 - `--duration <ms>` — fade time for on/off/color changes
 - `--brightness 0-100`, `--saturation 0-100`, `--kelvin <K>` — modifiers for `color`/`white`
@@ -92,7 +92,7 @@ target one with `--bulb` and a piece of its name or MAC, e.g. `--bulb 542b55`.
 - `--period <ms>`, `--loops <N>` — for `cycle`
 - `--interval <ms>`, `--punch` — for `screen` (`--punch` boosts washed-out averages)
 
-### 🌿 Examples 🌿
+### 🌿 <ins>Examples</ins> 🌿
 ```bash
 lifx list
 lifx on --bulb 542b55
@@ -108,7 +108,7 @@ lifx screen --interval 800 --punch      # Ctrl+C to stop
 
 `cycle` and `screen` loop until you press **Ctrl+C**.
 
-## 🌿 Can't find the bulb? 🌿
+## 🌿 <ins>Can't find the bulb?</ins> 🌿
 
 LIFX's LAN protocol (and apps like LIFX-Control-Panel) discover bulbs by **UDP
 broadcast**. That silently fails when the bulb sits on a different subnet/VLAN —
@@ -138,7 +138,7 @@ every command — including `shell`, `cycle`, and `screen` — works with it.
 `scan` defaults to your computer's own /24; target another with
 `lifx scan 192.168.50` (or `--subnet 192.168.50`).
 
-## 🌿 Presets / scenes 🌿
+## 🌿 <ins>Presets / scenes</ins> 🌿
 
 Edit [presets.json](presets.json) to add your own scenes. Each entry is a name
 mapped to a LIFX color (`hue`/`saturation`/`brightness` are 0–1, `kelvin` is
@@ -150,7 +150,7 @@ mapped to a LIFX color (`hue`/`saturation`/`brightness` are 0–1, `kelvin` is
 }
 ```
 
-## 🌿 How it works 🌿
+## 🌿 <ins>How it works</ins> 🌿
 - [lifx.js](lifx.js) — the CLI: argument parsing and all commands.
 - [lib/lights.js](lib/lights.js) — discovery, bulb targeting, and color parsing.
 - [lib/screen.js](lib/screen.js) — screen capture + averaging for ambient mode.
