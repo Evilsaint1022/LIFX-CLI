@@ -10,7 +10,7 @@
     "start": "node lifx.js"
   },
   "dependencies": {
-    "node-lifx-lan": "^0.3.0",
+    "node-lifx-lan": "^0.5.1",
     "screenshot-desktop": "^1.15.4",
     "sharp": "^0.34.5"
   }
