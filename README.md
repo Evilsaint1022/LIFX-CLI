@@ -1,5 +1,9 @@
 # 🌿 <ins>**LIFX-CLI - ( Command Line Interface )**</ins> 🌿
 
+![Status](https://img.shields.io/badge/%20Status-%20Active-44cc11)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-44cc11)](https://github.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A small terminal controller for LIFX bulbs, talking directly to them over your
 local network (the LIFX **LAN protocol**) — no cloud account, no API token, no
 internet round-trip. Works on **Linux and macOS**.
@@ -10,7 +14,7 @@ to a dependency-light CLI: color / brightness / Kelvin control, preset scenes,
 color cycling, breathe & pulse effects, and the app's signature **Average
 Screen Color** ambient mode (bias lighting that mirrors your screen).
 
-**🦋・`No moths were harmed in the making of this project. Any resemblance to harmed moths, living or deceased, is purely coincidental.`**  
+**`🦋 No moths were harmed in the making of this project. Any resemblance to harmed moths, living or deceased, is purely coincidental.`**  
 
 
 ## 🌿 <ins>Quick start (Linux)</ins> 🌿
