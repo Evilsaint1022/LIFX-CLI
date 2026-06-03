@@ -147,7 +147,7 @@ every command — including `shell`, `cycle`, and `screen` — works with it.
 
 ## 🌿 <ins>Presets / scenes</ins> 🌿
 
-Edit [presets.json](presets.json) to add your own scenes. Each entry is a name
+Edit [presets.json](src/presets/presets.json) to add your own scenes. Each entry is a name
 mapped to a LIFX color (`hue`/`saturation`/`brightness` are 0–1, `kelvin` is
 1500–9000) plus an optional `duration` fade and `power: false` to turn off:
 
@@ -158,9 +158,9 @@ mapped to a LIFX color (`hue`/`saturation`/`brightness` are 0–1, `kelvin` is
 ```
 
 ## 🌿 <ins>How it works</ins> 🌿
-- [lifx.js](lifx.js) — the CLI: argument parsing and all commands.
-- [lib/lights.js](lib/lights.js) — discovery, bulb targeting, and color parsing.
-- [lib/screen.js](lib/screen.js) — screen capture + averaging for ambient mode.
+- [lifx.js](src/lifx.js) — the CLI: argument parsing and all commands.
+- [lib/lights.js](src/lib/lights.js) — discovery, bulb targeting, and color parsing.
+- [lib/screen.js](src/lib/screen.js) — screen capture + averaging for ambient mode.
 
 Built on [`node-lifx-lan`](https://github.com/futomi/node-lifx-lan).
 Not affiliated with LIFX / LiFi Labs.
