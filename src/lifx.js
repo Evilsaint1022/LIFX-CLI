@@ -17,6 +17,12 @@ import {
   rgbToHsb,
 } from '../src/lib/lights.js';
 
+import chalk from 'chalk';
+const Chalk = chalk.constructor;
+const customChalk = new Chalk({level: 3});
+
+const log = console.log;
+
 import fs from 'fs';
 import dotenv from 'dotenv';
 
@@ -128,11 +134,11 @@ const commands = {
   // lifx scan [--subnet 192.168.1]  — find bulbs by unicast when broadcast fails
   async scan() {
     const base = flags.subnet || positional[1];
-    console.log(`Scanning ${base ? base : 'your local subnet'} for LIFX bulbs (unicast)...`);
+    log(chalk.blue.bold(`Scanning ${base ? base : 'your local subnet'} for LIFX bulbs (unicast)...`));
     const found = await scan(base);
     if (found.length === 0) {
-      console.log('No bulbs found. The bulb may be on a different subnet — check your');
-      console.log('router\'s device list for its IP, then use: lifx <cmd> --ip <address>');
+      log(chalk.blue.bold('No bulbs found. The bulb may be on a different subnet — check your'));
+      log('router\'s device list for its IP, then use: lifx <cmd> --ip <address>');
       return;
     }
     for (const f of found) console.log(`  ${f.ip}\t${f.label}`);
@@ -281,12 +287,13 @@ const commands = {
     console.log(
       `Connected to ${devices.length} bulb(s): ${devices.map((d) => d.label).join(', ')}`
     );
+    console.log(HELP);
     console.log('Type a command (e.g. `on`, `color red --brightness 50`), `help`, or `exit`.');
 
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: '<lifx> ',
+      prompt: '<LIFX>',
     });
     rl.prompt();
 
@@ -351,7 +358,9 @@ async function waveform(form, colorArg, extra = {}) {
   console.log(`${form === 4 ? 'Pulse' : 'Breathe'} ${colorArg} x${params.cycles}.`);
 }
 
-const HELP = `lifx-cli — control LIFX bulbs over the LAN
+const HELP = 
+`\n🌿 LIFX Command Line Interface 🌿\n
+control LIFX bulbs over the LAN
 
 Usage: lifx <command> [args] [--bulb <name>] [--duration <ms>]
 
