@@ -1,4 +1,4 @@
-# 🌿 <ins>**LIFX-CLI - ( Command Line Interface )**</ins> 🌿
+# 🌿 <ins>**LIFX Command Line Interface**</ins> 🌿
 
 ![Status](https://img.shields.io/badge/%20Status-%20Active-44cc11)
 [![Open Source](https://img.shields.io/badge/Open%20Source-Yes-44cc11)](https://github.com/)
