@@ -7,5 +7,50 @@
   "ocean": { "color": { "hue": 0.55, "saturation": 0.9, "brightness": 0.7, "kelvin": 3500 }, "duration": 2000 },
   "forest": { "color": { "hue": 0.33, "saturation": 0.8, "brightness": 0.6, "kelvin": 3500 }, "duration": 2000 },
   "party": { "color": { "hue": 0.83, "saturation": 1, "brightness": 1, "kelvin": 3500 }, "duration": 300 },
-  "nightlight": { "color": { "hue": 0.05, "saturation": 0.9, "brightness": 0.08, "kelvin": 2500 }, "duration": 2000 }
+  "nightlight": { "color": { "hue": 0.05, "saturation": 0.9, "brightness": 0.08, "kelvin": 2500 }, "duration": 2000 },
+
+  "reading": { "color": { "saturation": 0, "kelvin": 4200, "brightness": 0.85 }, "duration": 1000 },
+  "daylight": { "color": { "saturation": 0, "kelvin": 6500, "brightness": 1 }, "duration": 1000 },
+  "warmwhite": { "color": { "saturation": 0, "kelvin": 3000, "brightness": 0.8 }, "duration": 1000 },
+  "coolwhite": { "color": { "saturation": 0, "kelvin": 5500, "brightness": 0.9 }, "duration": 1000 },
+
+  "fireplace": { "color": { "hue": 0.06, "saturation": 1, "brightness": 0.5, "kelvin": 2200 }, "duration": 2500 },
+  "amber": { "color": { "hue": 0.09, "saturation": 0.8, "brightness": 0.6, "kelvin": 2400 }, "duration": 1500 },
+  "goldenhour": { "color": { "hue": 0.11, "saturation": 0.75, "brightness": 0.75, "kelvin": 2800 }, "duration": 1500 },
+
+  "sky": { "color": { "hue": 0.58, "saturation": 0.4, "brightness": 0.9, "kelvin": 5000 }, "duration": 1500 },
+  "ice": { "color": { "hue": 0.6, "saturation": 0.5, "brightness": 1, "kelvin": 7000 }, "duration": 1000 },
+  "moonlight": { "color": { "hue": 0.62, "saturation": 0.3, "brightness": 0.25, "kelvin": 6000 }, "duration": 2500 },
+
+  "aqua": { "color": { "hue": 0.5, "saturation": 1, "brightness": 0.8, "kelvin": 4000 }, "duration": 1500 },
+  "turquoise": { "color": { "hue": 0.47, "saturation": 0.9, "brightness": 0.75, "kelvin": 4000 }, "duration": 1500 },
+  "mint": { "color": { "hue": 0.4, "saturation": 0.5, "brightness": 0.85, "kelvin": 4000 }, "duration": 1500 },
+
+  "lime": { "color": { "hue": 0.25, "saturation": 1, "brightness": 0.8, "kelvin": 3500 }, "duration": 1500 },
+  "emerald": { "color": { "hue": 0.36, "saturation": 1, "brightness": 0.7, "kelvin": 3500 }, "duration": 1500 },
+  "jungle": { "color": { "hue": 0.31, "saturation": 0.95, "brightness": 0.55, "kelvin": 3200 }, "duration": 2000 },
+
+  "lavender": { "color": { "hue": 0.75, "saturation": 0.4, "brightness": 0.7, "kelvin": 3500 }, "duration": 1500 },
+  "purple": { "color": { "hue": 0.78, "saturation": 1, "brightness": 0.8, "kelvin": 3500 }, "duration": 1500 },
+  "magenta": { "color": { "hue": 0.9, "saturation": 1, "brightness": 0.9, "kelvin": 3500 }, "duration": 1500 },
+
+  "pink": { "color": { "hue": 0.95, "saturation": 0.8, "brightness": 0.85, "kelvin": 3500 }, "duration": 1500 },
+  "rose": { "color": { "hue": 0.98, "saturation": 0.6, "brightness": 0.75, "kelvin": 3200 }, "duration": 1500 },
+  "valentine": { "color": { "hue": 0.99, "saturation": 1, "brightness": 0.9, "kelvin": 3000 }, "duration": 1500 },
+
+  "redalert": { "color": { "hue": 0.0, "saturation": 1, "brightness": 1, "kelvin": 3000 }, "duration": 300 },
+  "orange": { "color": { "hue": 0.07, "saturation": 1, "brightness": 0.85, "kelvin": 2800 }, "duration": 1000 },
+  "yellow": { "color": { "hue": 0.14, "saturation": 1, "brightness": 1, "kelvin": 3500 }, "duration": 1000 },
+
+  "cyberpunk": { "color": { "hue": 0.82, "saturation": 1, "brightness": 1, "kelvin": 3500 }, "duration": 500 },
+  "neonblue": { "color": { "hue": 0.6, "saturation": 1, "brightness": 1, "kelvin": 4500 }, "duration": 500 },
+  "matrix": { "color": { "hue": 0.33, "saturation": 1, "brightness": 0.7, "kelvin": 3500 }, "duration": 500 },
+
+  "gaming": { "color": { "hue": 0.78, "saturation": 1, "brightness": 0.9, "kelvin": 4000 }, "duration": 500 },
+  "streaming": { "color": { "hue": 0.58, "saturation": 0.8, "brightness": 0.8, "kelvin": 4000 }, "duration": 500 },
+  "movie": { "color": { "saturation": 0, "kelvin": 2200, "brightness": 0.15 }, "duration": 2000 },
+
+  "arctic": { "color": { "hue": 0.58, "saturation": 0.25, "brightness": 1, "kelvin": 9000 }, "duration": 2000 },
+  "desert": { "color": { "hue": 0.1, "saturation": 0.75, "brightness": 0.85, "kelvin": 3000 }, "duration": 2000 },
+  "volcano": { "color": { "hue": 0.02, "saturation": 1, "brightness": 0.75, "kelvin": 2200 }, "duration": 2000 }
 }
