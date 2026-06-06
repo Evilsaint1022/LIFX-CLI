@@ -10,8 +10,12 @@
     "start": "node ./src/lifx.js"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "node-lifx-lan": "^0.5.1",
     "screenshot-desktop": "^1.15.4",
     "sharp": "^0.34.5"
+  },
+  "allowScripts": {
+    "sharp@0.34.5": true
   }
 }
