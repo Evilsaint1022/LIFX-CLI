@@ -17,6 +17,15 @@ import {
   rgbToHsb,
 } from '../src/lib/lights.js';
 
+import fs from 'fs';
+import dotenv from 'dotenv';
+
+if (!fs.existsSync('./.env')) {
+  fs.writeFileSync('./.env', '');
+}
+
+dotenv.config({ path: './.env', quiet: true });
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
 
@@ -253,6 +262,7 @@ const commands = {
   // lifx shell  — interactive prompt; discovers bulbs once, then loops.
   async shell() {
     let devices;
+    devices = await process.env.LIFX_IP;
     if (ipTarget) {
       process.stdout.write(`Connecting to ${ipTarget}...\n`);
       devices = await primeCacheByIp(ipTarget);
@@ -276,7 +286,7 @@ const commands = {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      prompt: 'lifx> ',
+      prompt: '<lifx> ',
     });
     rl.prompt();
 
@@ -394,6 +404,7 @@ async function main() {
     process.exitCode = 1;
     return;
   }
+    
   // If an IP was given, target the bulb directly (skip broadcast discovery).
   // `shell` primes its own cache; `scan` must not be pinned to one IP.
   if (ipTarget && command !== 'shell' && command !== 'scan') {
