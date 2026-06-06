@@ -53,7 +53,7 @@ an idle prompt exits. Every command below works identically in the shell
 
 ```bash
 npm install
-npm link        # optional: makes `lifx` available globally
+sudo npm link        # optional: makes `lifx` available globally but needs higher permission to run.
 ```
 
 If you don't `npm link`, run commands as `node lifx.js <command>` instead of `lifx <command>`.
