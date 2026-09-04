@@ -69,12 +69,41 @@ function parseFlags(args) {
   return { flags, positional };
 }
 
+function saveLifxIp(ip) {
+  if (!ip || ip === true) return;
+
+  let env = '';
+
+  try {
+    env = fs.readFileSync('./.env', 'utf8');
+  } catch {
+    env = '';
+  }
+
+  const line = `LIFX_IP=${ip}`;
+
+  if (/^LIFX_IP=.*$/m.test(env)) {
+    env = env.replace(/^LIFX_IP=.*$/m, line);
+  } else {
+    if (env.length > 0 && !env.endsWith('\n')) env += '\n';
+    env += `${line}\n`;
+  }
+
+  fs.writeFileSync('./.env', env);
+  process.env.LIFX_IP = ip;
+}
+
 // Populate the command state from a list of args (used by both one-shot and
 // interactive shell modes).
 function applyArgs(args) {
   ({ flags, positional } = parseFlags(args));
   command = positional[0];
   target = flags.bulb || flags.b;
+
+  if (flags.ip && flags.ip !== true) {
+    saveLifxIp(flags.ip);
+  }
+
   ipTarget = flags.ip || process.env.LIFX_IP;
   duration = flags.duration !== undefined ? Number(flags.duration) : 0;
 }
