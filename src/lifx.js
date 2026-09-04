@@ -75,7 +75,7 @@ function applyArgs(args) {
   ({ flags, positional } = parseFlags(args));
   command = positional[0];
   target = flags.bulb || flags.b;
-  ipTarget = process.env.LIFX_IP || flags.ip;
+  ipTarget = flags.ip || process.env.LIFX_IP;
   duration = flags.duration !== undefined ? Number(flags.duration) : 0;
 }
 
@@ -268,7 +268,6 @@ const commands = {
   // lifx shell  — interactive prompt; discovers bulbs once, then loops.
   async shell() {
     let devices;
-    devices = await process.env.LIFX_IP;
     if (ipTarget) {
       process.stdout.write(`Connecting to ${ipTarget}...\n`);
       devices = await primeCacheByIp(ipTarget);
