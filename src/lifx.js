@@ -75,7 +75,7 @@ function applyArgs(args) {
   ({ flags, positional } = parseFlags(args));
   command = positional[0];
   target = flags.bulb || flags.b;
-  ipTarget = flags.ip || process.env.LIFX_IP;
+  ipTarget = process.env.LIFX_IP || flags.ip;
   duration = flags.duration !== undefined ? Number(flags.duration) : 0;
 }
 
