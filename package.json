@@ -10,10 +10,10 @@
     "start": "node ./src/lifx.js"
   },
   "dependencies": {
-    "chalk": "^6.0.0",
-    "dotenv": "^17.4.2",
+    "chalk": "^6.0.1",
+    "dotenv": "^18.0.9",
     "node-lifx-lan": "^0.5.1",
-    "screenshot-desktop": "^1.15.6",
-    "sharp": "^0.35.4"
+    "screenshot-desktop": "^1.15.8",
+    "sharp": "^0.35.5"
   }
 }
