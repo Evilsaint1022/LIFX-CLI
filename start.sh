@@ -17,7 +17,7 @@ else
   echo "Error: Cannot detect Linux distribution." >&2
   exit 1
 fi
-
+echo "----------------------------------------"
 echo "Detected OS: ${PRETTY_NAME:-Unknown}"
 
 # Detect package manager using distribution ID and ID_LIKE.
@@ -131,6 +131,7 @@ fi
 # --- 4. Install Node dependencies (only if needed) ------------------------
 if [ ! -d node_modules ]; then
   echo "Installing dependencies..."
+  echo "----------------------------------------"
   npm install
 else
   echo "Dependencies already installed."

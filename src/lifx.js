@@ -358,7 +358,7 @@ const commands = {
     });
 
     rl.on('close', async () => {
-      console.log('\nBye.');
+      console.log('\nBye :)');
       await done();
       process.exit(0);
     });
@@ -387,7 +387,8 @@ async function waveform(form, colorArg, extra = {}) {
 }
 
 const HELP = 
-`\n🌿 LIFX Command Line Interface 🌿\n
+`----------------------------------------\n
+🌿 LIFX Command Line Interface 🌿\n
 control LIFX bulbs over the LAN
 
 Usage: lifx <command> [args] [--bulb <name>] [--duration <ms>]
@@ -437,6 +438,7 @@ async function main() {
   const fn = commands[command];
   if (!fn) {
     console.error(`Unknown command "${command}".\n`);
+    console.log(`----------------------------------------`);
     console.log(HELP);
     process.exitCode = 1;
     return;
