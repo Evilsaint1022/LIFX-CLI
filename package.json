@@ -7,11 +7,11 @@
     "lifx": "./src/lifx.js"
   },
   "scripts": {
-    "start": "node ./src/lifx.js"
+    "start": "sh start.sh"
   },
   "dependencies": {
     "chalk": "^6.0.1",
-    "dotenv": "^18.0.9",
+    "dotenv": "^18.0.10",
     "node-lifx-lan": "^0.5.1",
     "screenshot-desktop": "^1.15.8",
     "sharp": "^0.35.5"
